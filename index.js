@@ -10,22 +10,27 @@ const client = new Client({
     ],
 });
 
-// ID de la catégorie restreinte
-const restrictedCategoryId = '1312375205506711634'; // ID de la catégorie où appliquer les restrictions
+// Liste des IDs des catégories restreintes
+const restrictedCategoryIds = [
+    '1312375205506711634',
+    '1312376844900765808',
+    '1312376875418386432',
+    '1312376890597572638',
+];
 
 // Le bot est prêt
 client.once('ready', () => {
     console.log(`Bot connecté en tant que ${client.user.tag}`);
 });
 
-// Supprimer les messages texte dans les salons de la catégorie restreinte
+// Supprimer les messages texte dans les salons des catégories restreintes
 client.on('messageCreate', (message) => {
     // Ignorer les messages des bots
     if (message.author.bot) return;
 
-    // Vérifier si le salon appartient à la catégorie restreinte
+    // Vérifier si le salon appartient à l'une des catégories restreintes
     const channelCategoryId = message.channel.parentId; // Récupère l'ID de la catégorie du salon
-    if (channelCategoryId !== restrictedCategoryId) return;
+    if (!restrictedCategoryIds.includes(channelCategoryId)) return;
 
     // Vérifier si le message ne contient PAS de fichier/image et ne commence PAS par un lien
     if (!message.attachments.size && !message.content.startsWith('http')) {
